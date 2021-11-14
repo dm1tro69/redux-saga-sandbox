@@ -8,7 +8,7 @@ export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case USER_POSTS_FETCH_SUCCEEDED:
             const posts = action.payload.data
-            return {...state, posts}
+            return {...state, posts: posts}
         default: return state
     }
 }

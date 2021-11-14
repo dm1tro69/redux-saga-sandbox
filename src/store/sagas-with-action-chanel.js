@@ -1,6 +1,7 @@
 import {USER_POSTS_FETCH_FAILED, USER_POSTS_FETCH_REQUESTED, USER_POSTS_FETCH_SUCCEEDED} from "./actions";
 import {getUserPosts} from "../api/posts";
-import {call, put, takeEvery, all} from 'redux-saga/effects'
+import {call, put, takeEvery, all, actionChannel, take} from 'redux-saga/effects'
+import {buffers} from "redux-saga";
 
 
 function* fetchUserPosts(action) {
@@ -25,15 +26,13 @@ function* fetchUserPosts(action) {
 }
 
 export function* userPostsFetchRequestedWatcherSaga() {
-    yield takeEvery(USER_POSTS_FETCH_REQUESTED, fetchUserPosts)
-}
-export function* someSaga() {
-    console.log('Some Saga')
+    const requestChannel = yield actionChannel(USER_POSTS_FETCH_REQUESTED, buffers.none())
+    while (true){
+        const action = yield take(requestChannel)
+        console.log(action)
+        yield call(fetchUserPosts, action)
+    }
+
 }
 
-export function* rootSaga(){
-    yield all([
-       userPostsFetchRequestedWatcherSaga(),
-        someSaga()
-    ])
-}
+

@@ -9,7 +9,8 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import createSagaMiddleware from 'redux-saga'
 
 import {reducer} from "./store/reducer";
-import {saga} from "./store/sagas";
+import {rootSaga} from "./store/sagas";
+import {userPostsFetchRequestedWatcherSaga} from "./store/sagas-with-action-chanel";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -21,7 +22,7 @@ export const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
 
-sagaMiddleware.run(saga)
+sagaMiddleware.run(userPostsFetchRequestedWatcherSaga)
 
 ReactDOM.render(
   <Provider store={store}>
