@@ -11,18 +11,21 @@ import createSagaMiddleware from 'redux-saga'
 import {reducer} from "./store/reducer";
 import {rootSaga} from "./store/sagas";
 import {userPostsFetchRequestedWatcherSaga} from "./store/sagas-with-action-chanel";
+import {loginFlowReducer} from "./store/login-flow-reducer";
+import {loginFlowSaga} from "./store/sagas-login-flow";
 
 const sagaMiddleware = createSagaMiddleware();
 
 
 export const rootReducer = combineReducers({
-    app: reducer
+    app: reducer,
+    user: loginFlowReducer
 })
 
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaMiddleware)))
 
-sagaMiddleware.run(userPostsFetchRequestedWatcherSaga)
+sagaMiddleware.run(loginFlowSaga)
 
 ReactDOM.render(
   <Provider store={store}>
